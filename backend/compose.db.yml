@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:18.1
+    environment:
+      POSTGRES_DB: banco
+      POSTGRES_USER: usario
+      POSTGRES_PASSWORD: senha123
+    volumes:
+      - cadastrei-usuarios-data:/var/lib/postgresql/18/docker
+    ports:
+      - "5432:5432"
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  cadastrei-usuarios-data:
