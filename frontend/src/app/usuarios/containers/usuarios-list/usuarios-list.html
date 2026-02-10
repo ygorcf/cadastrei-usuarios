@@ -1,0 +1,7 @@
+<ul>
+    <li *ngFor="let usuario of usuarios$ | async">
+        {{ usuario.name }}
+    </li>
+</ul>
+
+<a routerLink="/novo" routerLinkActive="active">Adicionar novo usuário</a>
