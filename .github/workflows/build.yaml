@@ -37,6 +37,9 @@ jobs:
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+      
+      - name: Enter backend directory
+        run: cd backend
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -52,6 +55,11 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Enter backend directory
+        run: cd backend
 
       - name: Start containers
         run: docker compose -f compose.db.yml -f compose.yml up -d
