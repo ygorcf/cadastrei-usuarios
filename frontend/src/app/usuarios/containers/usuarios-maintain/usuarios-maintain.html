@@ -1,15 +1,13 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label for="name">Nome:</label>
-    <input id="name" formControlName="name" type="text" />
+    <div *ngFor="let field of formConfig">
+        <label [for]="field.controlName">{{ field.label }}:</label>
+        <input [id]="field.controlName" [formControlName]="field.controlName" [type]="field.type"
+            [placeholder]="field.placeholder" />
 
-    <label for="email">Email:</label>
-    <input id="email" formControlName="email" type="email" />
+        <span *ngIf="form.get(field.controlName)?.invalid && form.get(field.controlName)?.touched">
+            {{ parseError(form.get(field.controlName)?.errors) }}.
+        </span>
+    </div>
 
-    <label for="password">Senha:</label>
-    <input id="password" formControlName="password" type="password" />
-
-    <label for="confirmPassword">Confirmar Senha:</label>
-    <input id="confirmPassword" formControlName="confirmPassword" type="password" />
-
-    <button type="submit">Salvar</button>
+    <button [disabled]="form.invalid" type="submit">Salvar</button>
 </form>
