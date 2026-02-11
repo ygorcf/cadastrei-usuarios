@@ -1,6 +1,5 @@
 plugins {
     java
-    war
     id("org.springframework.boot") version "4.0.2"
     id("io.spring.dependency-management") version "1.1.7"
 }
@@ -27,7 +26,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.springframework.boot:spring-boot-starter-test")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat-runtime")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.mockito:mockito-core:5.+")
     runtimeOnly("org.postgresql:postgresql")

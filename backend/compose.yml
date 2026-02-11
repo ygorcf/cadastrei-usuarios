@@ -1,0 +1,15 @@
+services:
+  backend:
+    image: cadastrei-usuarios-backend
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: banco
+      DB_USER: usario
+      DB_PASSWORD: senha123
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
