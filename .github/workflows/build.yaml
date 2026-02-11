@@ -38,14 +38,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Enter backend directory
-        run: cd backend
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          dockerfile: ./Dockerfile
+          context: ./backend
+          dockerfile: ./backend/Dockerfile
           push: false
           tags: docker.io/cadastrei-usuarios-backend:latest
 
@@ -58,11 +55,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Enter backend directory
-        run: cd backend
-
       - name: Start containers
-        run: docker compose -f compose.db.yml -f compose.yml up -d
+        run: cd backend && docker compose -f compose.db.yml -f compose.yml up -d
 
       - name: Wait for app
         run: |
@@ -75,9 +69,9 @@ jobs:
             sleep 5
           done
           echo "App did not start"
-          docker compose -f compose.db.yml -f compose.yml logs
+          cd backend && docker compose -f compose.db.yml -f compose.yml logs
           exit 1
 
       - name: Stop containers
         if: always()
-        run: docker compose -f compose.db.yml -f compose.yml down
+        run: cd backend && docker compose -f compose.db.yml -f compose.yml down
