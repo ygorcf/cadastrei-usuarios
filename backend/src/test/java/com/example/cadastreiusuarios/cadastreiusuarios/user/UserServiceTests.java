@@ -2,12 +2,14 @@ package com.example.cadastreiusuarios.cadastreiusuarios.user;
 
 import com.example.cadastreiusuarios.cadastreiusuarios.common.exceptions.UserFriendlyException;
 import com.example.cadastreiusuarios.cadastreiusuarios.user.dto.UserCreate;
+import com.example.cadastreiusuarios.cadastreiusuarios.user.dto.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class UserServiceTests {
     @Mock
     private UserRepository repository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserService service;
 
@@ -31,14 +36,13 @@ public class UserServiceTests {
         when(repository.findAll()).thenReturn(List.of(u));
 
         // act
-        List<User> users = service.list();
+        List<UserResponse> users = service.list();
 
         // assert
         assert users.size() == 1;
-        assert users.get(0).getId() == 0L;
-        assert users.get(0).getName().equals("Ygor");
-        assert users.get(0).getEmail().equals("ygor@gmail.com");
-        assert users.get(0).getPassword().equals("123456");
+        assert users.get(0).id() == 0L;
+        assert users.get(0).name().equals("Ygor");
+        assert users.get(0).email().equals("ygor@gmail.com");
     }
 
     @Test
@@ -109,23 +113,26 @@ public class UserServiceTests {
     void shouldSaveUser() {
         // arrange
         UserCreate u = new UserCreate("Ygor", "ygor@gmail.com", "ygor123", "ygor123");
-        User mockedSave = new User("Ygor", "ygor@gmail.com", "ygor123");
+        User mockedSave = new User("Ygor", "ygor@gmail.com", "321rogy");
         mockedSave.setId(0L);
         when(repository.save(any())).thenReturn(mockedSave);
-        User savedUser;
+        when(passwordEncoder.encode(any())).thenReturn("321rogy");
+        UserResponse savedUser;
         ArgumentCaptor<User> userArgCaptor = ArgumentCaptor.forClass(User.class);
 
         // act
         savedUser = service.create(u);
 
         // assert
-        assert savedUser == mockedSave;
+        assert savedUser.id().equals(mockedSave.getId());
+        assert savedUser.name().equals(mockedSave.getName());
+        assert savedUser.email().equals(mockedSave.getEmail());
         verify(repository).save(userArgCaptor.capture());
 
         User userArg = userArgCaptor.getValue();
         assert userArg.getId() == null;
         assert userArg.getName().equals("Ygor");
         assert userArg.getEmail().equals("ygor@gmail.com");
-        assert userArg.getPassword().equals("ygor123");
+        assert userArg.getPassword().equals("321rogy");
     }
 }
