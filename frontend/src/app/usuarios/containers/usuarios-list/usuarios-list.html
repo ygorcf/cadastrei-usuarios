@@ -11,6 +11,10 @@
             <td>{{ usuario.id }}</td>
             <td>{{ usuario.name }}</td>
             <td>{{ usuario.email }}</td>
+            <td>
+                <a [routerLink]="['/editar', usuario.id]" routerLinkActive="active">Editar</a>
+                <button (click)="onClickDeleteUsuario(usuario.id)">Deletar</button>
+            </td>
         </tr>
     </tbody>
 </table>

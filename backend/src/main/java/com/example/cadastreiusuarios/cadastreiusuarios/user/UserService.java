@@ -21,6 +21,20 @@ public class UserService {
         return users;
     }
 
+    public User get(Long id) {
+        if (id == null) {
+            throw new UserFriendlyException("Id is required");
+        }
+
+        Optional<User> userQuery = repository.findById(id);
+
+        if (userQuery.isEmpty()) {
+            throw new UserFriendlyException("User not found");
+        }
+
+        return userQuery.get();
+    }
+
     public User create(UserCreate user) {
         if (user.name() == null) {
             throw new UserFriendlyException("Name is required");

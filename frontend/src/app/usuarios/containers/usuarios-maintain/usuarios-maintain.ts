@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from '../../services/usuario-service';
 import { first } from 'rxjs/internal/operators/first';
 import { catchError } from 'rxjs';
@@ -11,7 +11,7 @@ import { catchError } from 'rxjs';
   styleUrl: './usuarios-maintain.scss',
   standalone: false
 })
-export class UsuariosMaintain {
+export class UsuariosMaintain implements OnInit {
 
   form: FormGroup;
   formConfig = [
@@ -21,10 +21,14 @@ export class UsuariosMaintain {
     { label: 'Confirm Password', controlName: 'confirmPassword', type: 'password', placeholder: 'Confirm your password' },
   ]
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private usuarioService: UsuarioService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private usuarioService: UsuarioService
+  ) {
     this.form = this.formBuilder.group({
-      // name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      name: [''],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(50)]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
       confirmPassword: ['', [Validators.required]],
@@ -33,18 +37,28 @@ export class UsuariosMaintain {
     });
   }
 
+  ngOnInit(): void {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id) {
+      this.usuarioService.getUsuario(+id).subscribe(usuario => {
+        this.form.patchValue(usuario);
+      });
+    }
+  }
+
   onSubmit() {
     if (!this.form.valid) {
       return;
     }
 
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
     const usuarioData = this.form.value;
 
-    this.usuarioService.createUsuario(usuarioData).pipe(first(), catchError(e => {
+    this.usuarioService.saveUsuario(usuarioData, id ? +id : undefined).pipe(first(), catchError(e => {
       if (e.error && e.error.message) {
         alert(`Error: ${e.error.message}`);
       } else {
-        alert('Ocorreu um erro inesperado ao criar o usuario.');
+        alert('Ocorreu um erro inesperado ao salvar o usuario.');
       }
 
       return [];

@@ -18,6 +18,11 @@ public class UserController {
         return service.list();
     }
 
+    @GetMapping("/{id}")
+    public User get(@PathVariable Long id) {
+        return service.get(id);
+    }
+
     @PostMapping
     public User create(@RequestBody UserCreate user) {
         return service.create(user);

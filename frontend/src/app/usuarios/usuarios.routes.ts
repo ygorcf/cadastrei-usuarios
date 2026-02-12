@@ -11,4 +11,8 @@ export const routes: Routes = [
         path: 'novo',
         component: UsuariosMaintain
     },
+    {
+        path: 'editar/:id',
+        component: UsuariosMaintain
+    },
 ];
