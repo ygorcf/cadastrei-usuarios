@@ -1,22 +1,35 @@
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Nome</th>
-            <th>Email</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let usuario of usuarios$ | async">
-            <td>{{ usuario.id }}</td>
-            <td>{{ usuario.name }}</td>
-            <td>{{ usuario.email }}</td>
-            <td>
-                <a [routerLink]="['/editar', usuario.id]" routerLinkActive="active">Editar</a>
-                <button (click)="onClickDeleteUsuario(usuario.id)">Deletar</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="flex flex-col gap-4 px-20 py-10">
+    <h1 class="text-3xl font-bold text-violet-950 mb-4">
+        Cadastrei Usuários
+    </h1>
 
-<a routerLink="/novo" routerLinkActive="active">Adicionar novo usuário</a>
+    <section class="block py-6">
+        <a class="bg-violet-500 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-violet-800 transition mb-4 w-200"
+            routerLink="/novo" routerLinkActive="active">Adicionar novo usuário</a>
+    </section>
+
+    <table class="table-auto w-3xl divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let usuario of usuarios$ | async">
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.name }}</td>
+                <td>{{ usuario.email }}</td>
+                <td class="flex gap-4">
+                    <a class="bg-violet-500 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-violet-800 transition mb-4"
+                        [routerLink]="['/editar', usuario.id]" routerLinkActive="active">Editar</a>
+                    <button
+                        class="bg-red-500 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-red-800 transition mb-4 hover:cursor-pointer"
+                        (click)="onClickDeleteUsuario(usuario.id)">Deletar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

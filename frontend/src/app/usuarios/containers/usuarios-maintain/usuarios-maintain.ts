@@ -12,7 +12,7 @@ import { catchError } from 'rxjs';
   standalone: false
 })
 export class UsuariosMaintain implements OnInit {
-
+  isAdd = true;
   form: FormGroup;
   formConfig = [
     { label: 'Name', controlName: 'name', type: 'text', placeholder: 'Enter your name' },
@@ -35,6 +35,8 @@ export class UsuariosMaintain implements OnInit {
     }, {
       validators: this.passwordMatchValidator
     });
+
+    this.isAdd = !this.activatedRoute.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
