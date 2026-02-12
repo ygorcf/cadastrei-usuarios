@@ -5,6 +5,7 @@ import com.example.cadastreiusuarios.cadastreiusuarios.user.dto.UserCreate;
 import com.example.cadastreiusuarios.cadastreiusuarios.user.dto.UserResponse;
 import com.example.cadastreiusuarios.cadastreiusuarios.user.dto.UserUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserResponse> list() {
         List<UserResponse> users = new ArrayList<>();
@@ -71,7 +74,7 @@ public class UserService {
             throw new UserFriendlyException("Password and confirm password must match");
         }
 
-        User userEntity = new User(user.name(), user.email(), user.password());
+        User userEntity = new User(user.name(), user.email(), passwordEncoder.encode(user.password()));
         return new UserResponse(repository.save(userEntity));
     }
 
@@ -123,7 +126,7 @@ public class UserService {
         User userEntity = userQuery.get();
         userEntity.setName(user.name());
         userEntity.setEmail(user.email());
-        userEntity.setPassword(user.password());
+        userEntity.setPassword(passwordEncoder.encode(user.password()));
         return new UserResponse(repository.save(userEntity));
     }
 
