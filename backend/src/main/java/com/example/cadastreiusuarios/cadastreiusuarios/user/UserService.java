@@ -2,6 +2,7 @@ package com.example.cadastreiusuarios.cadastreiusuarios.user;
 
 import com.example.cadastreiusuarios.cadastreiusuarios.common.exceptions.UserFriendlyException;
 import com.example.cadastreiusuarios.cadastreiusuarios.user.dto.UserCreate;
+import com.example.cadastreiusuarios.cadastreiusuarios.user.dto.UserResponse;
 import com.example.cadastreiusuarios.cadastreiusuarios.user.dto.UserUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,13 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public List<User> list() {
-        List<User> users = new ArrayList<>();
-        repository.findAll().forEach(users::add);
+    public List<UserResponse> list() {
+        List<UserResponse> users = new ArrayList<>();
+        repository.findAll().forEach(user -> users.add(new UserResponse(user)));
         return users;
     }
 
-    public User get(Long id) {
+    public UserResponse get(Long id) {
         if (id == null) {
             throw new UserFriendlyException("Id is required");
         }
@@ -32,10 +33,10 @@ public class UserService {
             throw new UserFriendlyException("User not found");
         }
 
-        return userQuery.get();
+        return new UserResponse(userQuery.get());
     }
 
-    public User create(UserCreate user) {
+    public UserResponse create(UserCreate user) {
         if (user.name() == null) {
             throw new UserFriendlyException("Name is required");
         }
@@ -71,10 +72,10 @@ public class UserService {
         }
 
         User userEntity = new User(user.name(), user.email(), user.password());
-        return repository.save(userEntity);
+        return new UserResponse(repository.save(userEntity));
     }
 
-    public User update(UserUpdate user) {
+    public UserResponse update(UserUpdate user) {
         if (user.id() == null) {
             throw new UserFriendlyException("Id is required");
         }
@@ -123,7 +124,7 @@ public class UserService {
         userEntity.setName(user.name());
         userEntity.setEmail(user.email());
         userEntity.setPassword(user.password());
-        return repository.save(userEntity);
+        return new UserResponse(repository.save(userEntity));
     }
 
     public int remove(Long id) {
