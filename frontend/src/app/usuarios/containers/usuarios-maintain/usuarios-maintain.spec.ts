@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UsuariosMaintain } from './usuarios-maintain';
 import { UsuariosModule } from '../../usuarios-module';
+import { provideRouter } from '@angular/router';
 
 describe('UsuariosMaintain', () => {
   let component: UsuariosMaintain;
@@ -9,7 +10,10 @@ describe('UsuariosMaintain', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UsuariosModule]
+      imports: [UsuariosModule],
+      providers: [
+        provideRouter([]),
+      ]
     })
       .compileComponents();
 
